@@ -1,0 +1,20 @@
+{
+  "qewd_up": true,
+  "microservices": [
+    {
+      "name": "login_service",
+      "qewd": {
+        "serverName": "Login MicroService"
+      }
+    },
+    {
+      "name": "info_service",
+      "qewd": {
+        "serverName": "Info MicroService"
+      }
+    }
+  ],
+  "jwt": {
+    "secret": "3deb1293-9184-4c6c-94d1-0c8db4dd2aac"
+  }
+}

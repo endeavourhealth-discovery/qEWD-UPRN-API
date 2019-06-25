@@ -1,0 +1,30 @@
+  [
+    {
+      "uri": "/api/getinfo",
+      "method": "GET",
+      "handler": "api/getInfo",
+      "on_microservice": "info_service",
+      "authenticate": false 
+    },
+    {
+      "uri": "/api/login",
+      "method": "POST",
+      "handler": "api/login",
+      "on_microservice": "login_service",
+      "authenticate": false 
+    },
+    {
+      "uri": "/api/load",
+      "method": "POST",
+      "handler": "api/load",
+      "on_microservice": "info_service",
+      "authenticate": false 
+    },
+    {
+      "uri": "/api/status",
+      "method": "GET",
+      "handler": "api/status",
+      "on_microservice": "info_service",
+      "authenticate": false 
+    }
+  ]
