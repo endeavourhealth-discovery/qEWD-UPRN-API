@@ -86,7 +86,7 @@ AREAS ;
 IMPCLASS ;
  S ^IMPORT("LOAD")="Class file"
  
- set file=abp_"/ID32_Class_Records.CSV"
+ set file=abp_"/ID32_Class_Records.csv"
  close file
  set ^IMPORT("FILE")=$$ESCAPE(file)
  open file:(readonly:exception="do BADOPEN")
@@ -280,13 +280,13 @@ ATTVAL(attribut,data)       ;
  ;
 IMPDPA ;Imports and indexes the DPA file.
  S ^IMPORT("LOAD")="DPA file"
- s file=abp_"/ID28_DPA_Records.CSV"
+ s file=abp_"/ID28_DPA_Records.csv"
  s ^IMPORT("FILE")=$$ESCAPE(file)
  D SETSWAPS^UPRNU
  s del=","
  s d="~"
  
- set file=abp_"/ID28_DPA_Records.CSV"
+ set file=abp_"/ID28_DPA_Records.csv"
  close file
  open file:(readonly:exception="do BADOPEN")
  use file:exception="goto EOF"
@@ -450,7 +450,7 @@ indexstr(index,term)         ;Indexes street or building etc
  
 IMPLPI ;Imports and indexes LPI file
  S ^IMPORT("LOAD")="LPI file"
- s file=abp_"/ID24_LPI_Records.CSV"
+ s file=abp_"/ID24_LPI_Records.csv"
  s ^IMPORT("FILE")=$$ESCAPE(file)
  s del=","
  s d="~"
@@ -552,7 +552,7 @@ IMPCOUNT ;
 IMPSTR ;
  S ^IMPORT("LOAD")="Street descriptors"
  s del=","
- S file=abp_"/ID15_StreetDesc_Records.CSV"
+ S file=abp_"/ID15_StreetDesc_Records.csv"
  S ^IMPORT("FILE")=$$ESCAPE(file)
  
  close file
@@ -578,7 +578,7 @@ IMPSTR ;
  Q
 IMPBLP ;
  S ^IMPORT("LOAD")="UPRN file"
- s file=abp_"/ID21_BLPU_Records.CSV"
+ s file=abp_"/ID21_BLPU_Records.csv"
  s ^IMPORT("FILE")=$$ESCAPE(file)
  s recno=0
  s del=","
