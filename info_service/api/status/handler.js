@@ -6,7 +6,8 @@ module.exports = function (args, finished) {
   var temp = new this.documentStore.DocumentNode('temp', [process.pid]);
   temp.delete();
 
-  var result = this.db.function({ function: 'STATUS^DS', arguments: [] });
+  //var result = this.db.function({ function: 'STATUS^DS', arguments: [] });
+  var result = this.db.function({ function: 'STATUS^UPRNMGR', arguments: [] });
 
   var obj = temp.getDocument();
 

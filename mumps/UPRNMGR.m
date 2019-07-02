@@ -14,31 +14,35 @@ UPRNMGR ; ;[ 06/10/2019  3:37 PM ]
  Q
 LOAD(folder)       ;Triggers a load of ABP files (background)
  set found=$$8^ZOS(folder)
- if 'found w "{""Response"":{""Error"":""Folder not found""}}" q
+ if 'found set ^temp($j,1)="{""Response"":{""Error"":""Folder not found""}}" q
  LOCK ^IMPORT:1 I '$t D  Q
- .w "{""Response"":{""Error"":""Import already in progress""}}" q
+ .set ^temp($j,1)="{""Response"":{""Error"":""Import already in progress""}}"
+ .quit
  LOCK
  J IMPORT^UPRN1(folder)
- w "{""Response"":{""Success"":""Folder found attempting load""}}" q
+ set ^temp($j,1)="{""Response"":{""Success"":""Folder found attempting load""}}"
  q
-STATUS ;Returns the current status of the ABP load and indexing
- i '$D(^IMPORT("FILE")) d  Q
- .W "{""Status"":"
- .w """Load not commenced""}"
- W "{""Status"":{"
- I $G(^IMPORT("STATUS"))="ERROR" D  Q
- .w """Error:{"
- .w """Error text"":"""_^IMPORT("ERRORTEXT")_""","
- .W """Debug error"":"""_^IMPORT("ERROR")_"""}}"
- I $D(^IMPORT("END")) D  Q
- .W """Commenced"":"""_^IMPORT("START")_""","
- .W """Completed"":"""_^IMPORT("END")_"""}}"
- W """Commenced"":"""_^IMPORT("START")_""","
- W """Folder"":"""_^IMPORT("FOLDER")_""","
+STATUS() ;Returns the current status of the ABP load and indexing
+ kill ^temp($j)
+ 
+ i '$D(^IMPORT("FILE")) d  Q 1
+ .set ^temp($j,1)="{""Status"":"_"""Load not commenced""}"
+ .quit
+ 
+ set ^temp($j,1)="{""Status"":{"
+ I $G(^IMPORT("STATUS"))="ERROR" D  quit 1
+ .set ^temp($j,1)=^temp($j,1)_"""Error"":{"
+ .set ^temp($j,1)=^temp($j,1)_"""Error text"":"""_^IMPORT("ERRORTEXT")_""","
+ .set ^temp($j,1)=^temp($j,1)_"""Debug error"":"""_^IMPORT("ERROR")_"""}}}"
+ I $D(^IMPORT("END")) D  quit 1
+ .set ^temp($j,1)=^temp($j,1)_"""Commenced"":"""_^IMPORT("START")_""","
+ .set ^temp($j,1)=^temp($j,1)_"""Completed"":"""_^IMPORT("END")_"""}}"
+ set ^temp($j,1)=^temp($j,1)_"""Commenced"":"""_^IMPORT("START")_""","
+ set ^temp($j,1)=^temp($j,1)_"""Folder"":"""_^IMPORT("FOLDER")_""","
  I $D(^IMPORT("LOAD")) D
  .I $D(^IMPORT("FILE")) D
- ..W """Loading"":"""_^IMPORT("LOAD")_""",""File"":"""_^IMPORT("FILE")_"""}}"
- Q
+ ..s ^temp($j,1)=^temp($j,1)_"""Loading"":"""_^IMPORT("LOAD")_""",""File"":"""_^IMPORT("FILE")_"""}}"
+ Q 1
  
 GETUPRN(adrec,qpost,orgpost,country,summary) ;Returns the result of a matching request
  ;adrec is an address string with post code at the end

@@ -19,8 +19,9 @@ SURE ;
 IMPORT(folder)     ;
  LOCK ^IMPORT:1 I '$T Q
  s abp=folder
- S $ZT="ERROR^UPRN1"
- i $e(abp,$l(abp))="\" s abp=$e(abp,1,$l(abp)-1)
+ set $ECODE=""
+ set $ETRAP="GOTO ET^UTILS"
+ i $e(abp,$l(abp))="/" s abp=$e(abp,1,$l(abp)-1)
  K ^IMPORT
  S ^IMPORT("START")=$$DH^UPRNL1($H)_"T"_$$TH^UPRNL1($P($H,",",2))
  s ^IMPORT("FOLDER")=$$ESCAPE(abp)
