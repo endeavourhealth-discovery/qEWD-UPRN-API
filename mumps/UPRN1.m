@@ -32,6 +32,7 @@ IMPORT(folder)     ;
  D IMPLPI
  D IMPCLASS
  D AREAS
+ D SETSWAPS^UPRNU
  K ^IMPORT("LOAD")
  S ^IMPORT("END")=$$DH^UPRNL1($H)_"T"_$$TH^UPRNL1($P($H,",",2))
  LOCK
@@ -105,6 +106,19 @@ IMPCLASS ;
  ..;DS-end
  .quit
  quit
+ 
+RESIDE ;Imports residential codes
+ S ^IMPORT("LOAD")="Residential code file"
+ s file=abp_"/Residential_codes.txt"
+ s ^IMPORT("FILE")=$$ESCAPE(file)
+ open file:(readonly:exception="do BADOPEN")
+ use file:exception="goto EOF"
+ use file read rec
+ for  use file read rec q:rec=""  do
+ .S include=$p(rec,$c(9),1)
+ .s code=$p(rec,$c(9),2)
+ .i include="Y" S ^UPRN("RESIDENCE",code)=""
+ q
  
 LEVENSTR ;
  ;K ^UPRNW("SFIX")
