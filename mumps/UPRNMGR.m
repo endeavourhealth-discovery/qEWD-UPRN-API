@@ -55,6 +55,8 @@ GETUPRN(adrec,qpost,orgpost,country,summary) ;Returns the result of a matching r
  s summary=$g(summary)
  I country="" s country="e"
  s country=$s($e(country)="e":"e",$e(country)="w":"w",1:"o")
+ ;Checks for library update
+ I '$D(^UPRNS("DROPSUFFIX")) D SETSWAPS^UPRNU
  ;Checks quality of address
  D ADRQUAL^UPRN(adrec,country)
  I '$D(^TUPRN($J,"INVALID")) D
