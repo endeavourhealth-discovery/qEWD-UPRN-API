@@ -44,11 +44,12 @@ STATUS() ;Returns the current status of the ABP load and indexing
  ..s ^temp($j,1)=^temp($j,1)_"""Loading"":"""_^IMPORT("LOAD")_""",""File"":"""_^IMPORT("FILE")_"""}}"
  Q 1
  
-GETUPRN(adrec,qpost,orgpost,country,summary) ;Returns the result of a matching request
+GETUPRN(adrec,qpost,orgpost,country,summary,writejson) ;Returns the result of a matching request
  ;adrec is an address string with post code at the end
  ;qpost is list of post code areas (optional)
  ;orgpost is the post code of a local organisatoin to narrow down search
  k ^TUPRN($J)
+ s writejson=+$g(writejson)
  s adrec=$tr(adrec,",","~")
  s adrec=$tr(adrec,"""")
  s country=$$lc^UPRNL($g(country))
@@ -69,7 +70,7 @@ GETUPRN(adrec,qpost,orgpost,country,summary) ;Returns the result of a matching r
  d QUALCHK(.json)
  d MATCHK(.json)
  s json=json_"}"
- w json
+ w:writejson json
  set ^temp($j,1)=json
  q
 SUMMARY ;Summary result
