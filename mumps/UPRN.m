@@ -622,6 +622,7 @@ p1 ;Completely wrong post code ignore, building, null flat, needs number and str
  i $D(^TUPRN($J,"MATCHED")) Q
  
 2455 ;Drop number and street, building and flat is number and street
+ ;or shift street to locality
  I '$D(^TUPRN($J,"MATCHED")) D
  .S ALG="2455-"
  .s matchrec="Pe"
@@ -783,6 +784,11 @@ p1 ;Completely wrong post code ignore, building, null flat, needs number and str
  ;ABP doesnt contain building and flat 
  s matches=$$match58(adpost,adstreet,adbno,adbuild,adflat)
  I $D(^TUPRN($J,"MATCHED")) q
+
+3100 ;shift flat to number, building to street,street to locality
+ ;No number
+ S ALG="3100-"
+ s matches=$$match60(adpost,adstreet,adbno,adbuild,adflat,adloc)
  Q
  q
  
@@ -2958,6 +2964,16 @@ match28(tpost,tstreet,tbno,tbuild,tflat)
  ..s t2=$p(tstreet," ",i+1,20)
  ..s matches=$$match7(tpost,t2,"",t1,tflat)
  q $G(^TUPRN($J,"MATCHED"))
+
+match60(tpost,tstreet,tbno,tbuild,tflat,tloc) 
+ ;Right shifts into locality
+ i adbno'=""!(tloc'="") q 0
+ I $D(^UPRN("X5",tpost,tbuild,tflat,"","")) d
+ .i '$$isroad^UPRNA(tstreet) d
+ ..s matchrec="Pe,Se,Ne,Be,Fe"
+ ..S ALG=ALG_"match60"
+ ..d setuprns("X5",tpost,tbuild,tflat,"","")
+ Q $G(^TUPRN($J,"MATCHED"))
  
 setuprns(index,n1,n2,n3,n4,n5) 
  n uprn,table,key
