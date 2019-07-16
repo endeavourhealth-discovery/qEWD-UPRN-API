@@ -53,33 +53,13 @@ MATCH(ROUTINE,ARGS) ; evaluate paths in sequence until match found (else 404)
  I +$G(AUTHNODE) D  ; Web Service has authorization node
  . ;
  . ; If there is no File 200, forget the whole thing. Pretend it didn't happen.
- . I '$D(^VA(200)) QUIT
+ . ;I '$D(^VA(200)) QUIT
  . ;
  . ; First, user must authenticate
  . S HTTPRSP("auth")="Basic realm="""_HTTPREQ("header","host")_"""" ; Send Authentication Header
  . N AUTHEN S AUTHEN=$$AUTHEN($G(HTTPREQ("header","authorization"))) ; Try to authenticate
  . I 'AUTHEN D SETERROR^VPRJRUT(401) QUIT  ; Unauthoirzed
- . ;
- . ; DEBUG.ASSERT that DUZ is greater than 0
- . I $G(DUZ)'>0 S $EC=",U-NO-DUZ,"
- . ;
- . ; Then user must have security key
- . N KEY S KEY=$P(AUTHNODE,"^",2)    ; Get Key pointer
- . I KEY S KEY=$P($G(^DIC(19.1,KEY,0)),"^") ; Get Key name from Security Key file
- . I $L(KEY),'$D(^XUSEC(KEY,DUZ)) D SETERROR^VPRJRUT(405,"Missing security key "_KEY) QUIT  ; Method not allowed
- . K KEY
- . ;
- . ; And not have reverse security key
- . N RKEY S RKEY=$P(AUTHNODE,"^",3)  ; Get Key pointer
- . I RKEY S RKEY=$P($G(^DIC(19.1,RKEY,0)),"^") ; Get Reverse Key name from Security Key file
- . I $L(RKEY),$D(^XUSEC(RKEY,DUZ)) D SETERROR^VPRJRUT(405,"Holding exclusive key "_RKEY) QUIT  ; Method not allowed
- . K RKEY
- . ;
- . ; And have access to the menu option indicated
- . N OPTION S OPTION=$P(AUTHNODE,"^",4)  ; Get Option pointer
- . I OPTION N OPTIONNM S OPTIONNM=$P($G(^DIC(19,OPTION,0)),"^") ; Get Option name from Option file
- . I OPTION,$L($T(ACCESS^XQCHK)),'$$ACCESS^XQCHK(DUZ,OPTION) D SETERROR^VPRJRUT(405,"No access to option "_OPTIONNM)  ; Method not allowed
- . K OPTION,OPTIONNM
+ . QUIT
  QUIT
  ;
  ;
@@ -400,24 +380,20 @@ URLMAP ; map URLs to entry points (HTTP methods handled within entry point)
  ;;zzzzz
  Q
  ;
-AUTHEN(HTTPAUTH) ; Authenticate User against VISTA from HTTP Authorization Header
+AUTHEN(HTTPAUTH)
  ;
  ; We only support Basic authentication right now
  N P1,P2 S P1=$P(HTTPAUTH," "),P2=$P(HTTPAUTH," ",2)
  I $$UP^VPRJRUT(P1)'="BASIC" Q 0 ; We don't support that authentication
+ I $G(^ICONFIG("KEY"))="" Q 0 ; We need a key to do the RC-4 stuff
  ;
  ; Decode Base64 encoded un:pwd
- N ACVC S ACVC=$$DECODE64^VPRJRUT(P2)
- S ACVC=$TR(ACVC,":",";") ; switch the : so that it's now ac;vc
- ; TODO: Check if there is more than one colon in the ACVC
- ;
- ; Sign-on
- N IO S IO=$P
- D SETUP^XUSRB() ; Only partition set-up; No single sign-on or CAPRI
- N RTN D VALIDAV^XUSRB(.RTN,$$ENCRYP^XUSRB1(ACVC)) ; sign-on call
- I RTN(0)>0,'RTN(2) Q 1 ; Sign on successful!
- I RTN(0)=0,RTN(2) Q 0  ; Verify Code must be changed NOW!
- I $L(RTN(3)) Q 0  ; Error Message
- ;
- ; TODO: Division Selection
+ N ACVC,REC
+ S ACVC=$$DECODE64^VPRJRUT(P2)
+ set un=$piece(ACVC,":"),pwd=$piece(ACVC,":",2)
+ if un="" quit 0
+ set REC=$get(^BUSER("USER",un))
+ if REC="" quit 0
+ set zpwd=$$DERCFOUR^EWEBRC4($p(REC,"~",1),^ICONFIG("KEY"))
+ if zpwd=pwd quit 1  ; Sign on successful!
  QUIT 0

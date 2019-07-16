@@ -6,7 +6,11 @@ LOAD(folder)
 	quit 1
 
 SETUP	;
-	S ^%W(17.6001,"B","GET","api/getinfo","GETMUPRN^UPRNHOOK2",0)=""
+	S ^%W(17.6001,"B","GET","api/getinfo","GETMUPRN^UPRNHOOK2",100)=""
+	S ^%W(17.6001,100,"AUTH")=1
+	S ^%W(17.6001,100,0)="GET"
+	S ^%W(17.6001,100,1)="api/getinfo"
+	S ^%W(17.6001,100,2)="GETMUPRN^UPRNHOOK2"
 	quit
 	
 	; M Web server hook
@@ -14,7 +18,12 @@ SETUP	;
 	; TEST
 GETMUPRN(result,arguments)
 	K ^TMP($J)
-	s ^here=1
+	
+	;set token=$get(HTTPREQ("header","authorization"))
+	;if token="" S HTTPERR=500 D SETERROR^VPRJRUT("500","undefined") quit
+	;set token=$piece(token,"Bearer ",2)
+	;if '$data(^TOKEN(token)) S HTTPERR=500 D SETERROR^VPRJRUT("500","undefined") quit
+
 	set adrec=$Get(arguments("adrec"))
 	set qpost=$Get(arguments("qpost"))
 	set country=$Get(arguments("country"))
