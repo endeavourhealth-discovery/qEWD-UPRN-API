@@ -9,7 +9,7 @@ SET W !,"Global ^" R STR  Q:STR=""  S GLOB="^"_STR
 SUB W !,"node ",ND," : " R STR I STR'="" S:NEXT'="" NEXT=NEXT_""","""_STR S:NEXT="" NEXT=STR S ND=ND+1 G SUB
  S A=GLOB_"("_""""_NEXT_""""_")"
  I A'[("""""") I $D(@A)=1!($D(@A)=11) W !,A," = ",@A
- S NEXT=$ZN(@A) G:NEXT=-1 G
+ S NEXT=$Q(@A) G:NEXT="" G
 B ;
  W !,NEXT,"=",@NEXT
 NEXT S NEXT=$Q(@NEXT) G:NEXT="" G
