@@ -1,3 +1,9 @@
+https://blog.frd.mn/how-to-set-up-proper-startstop-services-ubuntu-debian-mac-windows/
+
+cp MSTU /etc/init.d/MSTU
+chmod +x /etc/init.d/MSTU
+update-rc.d MSTU defaults
+
 service MSTU start
 service MSTU stop
 service MSTU restart

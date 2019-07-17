@@ -98,6 +98,9 @@ fi
 # tls-config
 wget https://raw.githubusercontent.com/endeavourhealth-discovery/qEWD-UPRN-API/master/tls/gtmcrypt_config.libconfig
 
+# service
+wget https://raw.githubusercontent.com/endeavourhealth-discovery/qEWD-UPRN-API/master/installer/MSTU
+
 export ydb_dist=/usr/local/lib/yottadb/r126
 export ydb_gbldir=/root/.yottadb/r1.26_x86_64/g/yottadb.gld
 export ydb_dir=/root/.yottadb
@@ -148,5 +151,9 @@ export ydb_routines=/root/.yottadb/r1.26_x86_64/r/
 
 cd /root/.yottadb/r1.26_x86_64/r/
 /usr/local/lib/yottadb/r126/mumps -run ^START
+
+cp MSTU /etc/init.d/MSTU
+chmod +x /etc/init.d/MSTU
+update-rc.d MSTU defaults
 
 #reboot
