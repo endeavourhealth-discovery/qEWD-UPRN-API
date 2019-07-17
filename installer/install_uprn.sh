@@ -122,6 +122,9 @@ uuid=$(cat '/tmp/uuid.txt')
 cut -d':' -f2- /tmp/monkey.txt > /tmp/monkey2.txt
 cut -d' ' -f2- /tmp/monkey2.txt > /tmp/monkey3.txt
 
+# required for MSTU service 
+cp /tmp/monkey3.txt /opt/apiuprn/certs/monkey3.txt
+
 monkey=$(cat '/tmp/monkey3.txt')
 
 openssl genrsa -aes128 -passout pass:$uuid -out /opt/apiuprn/certs/mycert.key 2048
