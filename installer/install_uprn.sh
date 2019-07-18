@@ -81,6 +81,7 @@ if [ ! -f "$FILE" ]; then
 	wget https://raw.githubusercontent.com/endeavourhealth-discovery/qEWD-UPRN-API/master/mumps/ZOS.m
 	wget https://raw.githubusercontent.com/endeavourhealth-discovery/qEWD-UPRN-API/master/mumps/START.m
 	wget https://raw.githubusercontent.com/endeavourhealth-discovery/qEWD-UPRN-API/master/mumps/BASE64.m
+	wget https://raw.githubusercontent.com/endeavourhealth-discovery/qEWD-UPRN-API/master/mumps/EWEBRC4.m
 
 	# M web-server routines
 	wget https://raw.githubusercontent.com/endeavourhealth-discovery/qEWD-UPRN-API/master/mumps/VPRJREQ.m
@@ -152,7 +153,7 @@ export ydb_routines=/root/.yottadb/r1.26_x86_64/r/
 cd /root/.yottadb/r1.26_x86_64/r/
 /usr/local/lib/yottadb/r126/mumps -run ^START
 
-cp MSTU /etc/init.d/MSTU
+cp /tmp/mumps/MSTU /etc/init.d/MSTU
 chmod +x /etc/init.d/MSTU
 update-rc.d MSTU defaults
 
