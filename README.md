@@ -1,4 +1,38 @@
-# qEWD-UPRN-API
+# UPRN
+
+The software is split into two solutions.
+
+The UPRN software can be implemented using a set of microservices written in QEWD and hosted in docker.
+Alternatively, the UPRN software can be implemented using Sam Habiel's M Web Server (https://github.com/shabiel/M-Web-Server).
+Both solutions provide users with the same ?getinfo REST interface.
+
+The M Web Server interface supports Basic Authentication.
+
+
+# M Web Server
+
+Install:
+sudo chmod +x install_uprn.sh
+sudo ./install_uprn.sh
+
+To Add a User:
+```
+cd /usr/local/lib/yottadb/r126
+./ydb
+
+set ^ICONFIG("KEY")="endeavour"
+set ^BUSER("USER","psimon")=$$TORCFOUR^EWEBRC4("dls1tg",^ICONFIG("KEY"))
+```
+
+https://192.168.59.134:9080/api/getinfo?adrec=Crystal Palace football club, SE25 6PU
+
+The MSTU service runs the web service by default over TLS (see /mumps/START.m).
+If you want to run the web service over http do START^VPRJREQ(9080).
+job START^VPRJREQ(9080) to run the web service in the background.
+
+
+
+# qEWD
 
 Install docker!
 
