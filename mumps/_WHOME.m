@@ -4,7 +4,7 @@
 EN(RESULT) ; PEP
  S RESULT("mime")="text/html; charset=utf-8"
  N CRLF S CRLF=$C(13,10)
- SET RESULT(1)="<html><b>Ping me</b></html>"
+ SET RESULT(1)="<html><b>Home page</b></html>"
  quit
 
  N ARGS S ARGS("*")="index.html"
