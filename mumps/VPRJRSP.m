@@ -1,4 +1,4 @@
-VPRJRSP ;SLC/KCM -- Handle HTTP Response;2018-08-17  9:24 AM
+VPRJRSP ;SLC/KCM -- Handle HTTP Response;2018-08-17  9:24 AM ; 7/24/19 8:17am
  ;;1.0;JSON DATA STORE;;Sep 01, 2012
  ;
  ; -- prepare and send RESPONSE
@@ -56,7 +56,7 @@ MATCH(ROUTINE,ARGS) ; evaluate paths in sequence until match found (else 404)
  . ;I '$D(^VA(200)) QUIT
  . ;
  . ; First, user must authenticate
- . S HTTPRSP("auth")="Basic realm="""_HTTPREQ("header","host")_"""" ; Send Authentication Header
+ . S:$data(^ICONFIG("BASIC-AUTH")) HTTPRSP("auth")="Basic realm="""_HTTPREQ("header","host")_"""" ; Send Authentication Header
  . N AUTHEN S AUTHEN=$$AUTHEN($G(HTTPREQ("header","authorization"))) ; Try to authenticate
  . I 'AUTHEN D SETERROR^VPRJRUT(401) QUIT  ; Unauthoirzed
  . QUIT
@@ -380,8 +380,11 @@ URLMAP ; map URLs to entry points (HTTP methods handled within entry point)
  ;;zzzzz
  Q
  ;
-AUTHEN(HTTPAUTH)
+AUTHEN(HTTPAUTH) 
  ;
+ ; key-cloak
+ if '$data(^ICONFIG("BASIC-AUTH")) quit $$VALTOKEN^CURL(HTTPAUTH)
+ 
  ; We only support Basic authentication right now
  N P1,P2 S P1=$P(HTTPAUTH," "),P2=$P(HTTPAUTH," ",2)
  I $$UP^VPRJRUT(P1)'="BASIC" Q 0 ; We don't support that authentication
