@@ -98,8 +98,7 @@ MATCHK(json,summary)       ;populates match details
  .s json=json_"""UPRN"":"""_uprn_""","
  .s json=json_"""Qualifier"":"""_$$qual^UPRN2(matchrec)_""""
  .I $D(^UPRN("CLASS",uprn)) d
- ..s json=json_",""Classification"":"""_$tr($p(^UPRN("CLASS",uprn),"~"),"""")_""","
- ..s json=json_"""Scheme"":"""_$tr($p(^UPRN("CLASS",uprn),"~",2),"""")_""""
+ ..s json=json_",""Classification"":"""_$tr($p(^UPRN("CLASS",uprn),"~"),"""")_""""
  .I $G(summary) q
  .s json=json_","
  .s alg=^TUPRN($J,"MATCHED",uprn,table,key,"A")
@@ -158,3 +157,28 @@ QUALCHK(json) ;Quality checks
  E  D
  .s json=json_"""good"","
  Q
+GETUPRNI(uprn,writejson)     ;
+ n json
+ s writejson=+$g(writejson)
+ s json="{"
+ s json=json_"""UPRN"":"""_(uprn*1)_""","
+ s json=json_"""Matched"":"
+ I '$d(^UPRN("U",uprn)) d
+ .s json=json_"false,"
+ .s json=json_"""Error"":""No data for this UPRN"""
+ E  D
+ .s json=json_"true,"
+ .s class=$p($g(^UPRN("CLASS",uprn)),"~")
+ .I class'="" d
+ ..s json=json_"""Classification"":"""_class_""","
+ .s coord=$p(^UPRN("U",uprn),"~",7)
+ .s json=json_"""Latitude"":"""_$p(coord,",",3)_""","
+ .s json=json_"""Longitude"":"""_$p(coord,",",4)_""","
+ .s json=json_"""Pointcode"":"""_$p(coord,",",5)_""","
+ .s json=json_"""XCoordinate"":"""_$p(coord,",",1)_""","
+ .s json=json_"""YCoordinate"":"""_$p(coord,",",2)_""""
+ s json=json_"}"
+ w:writejson json
+ set ^temp($j,1)=json
+ s ^DLS=json
+ q

@@ -99,11 +99,9 @@ IMPCLASS ;
  .s code=$tr($p(rec,",",6),"""")
  .;DS-start classfication scheme added
  .s scheme=$p(rec,",",7)
- .s scheme=$s(scheme["AddressBase":"ABP",scheme["VOA":"VOA",1:scheme)
- .s newrec=code_"~"_scheme
- .i newrec'=$G(^UPRN("CLASS",uprn)) d
- ..s ^UPRN("CLASS",uprn)=newrec
- ..;DS-end
+ .i scheme'["AddressBase" q
+ .s newrec=code
+ .s ^UPRN("CLASS",uprn)=newrec
  .quit
  quit
  
@@ -117,7 +115,9 @@ RESIDE ;Imports residential codes
  for  use file read rec q:rec=""  do
  .S include=$p(rec,$c(9),1)
  .s code=$p(rec,$c(9),2)
- .i include="Y" S ^UPRN("RESIDENCE",code)=""
+ .s term=$p(rec,$c(9),3)
+ .S ^UPRN("CLASSIFICATION",code,"term")=term
+ .S ^UPRN("CLASSIFICATION",code,"residential")=include
  q
  
 LEVENSTR ;
@@ -505,6 +505,7 @@ LPIREC .s saos=$p(rec,del,12)
  .S nrec=saos_"~"_saosf_"~"_saoe_"~"_saoef_"~"_saot
  .s nrec=nrec_"~"_paos_"~"_paosf_"~"_paoe_"~"_paoef_"~"_paot
  .s nrec=nrec_"~"_str_"~"_status
+ .S ^LASTREC=$get(uprn)_"|"_$get(key)_"|"_$get(nrec)
  .i nrec'=$g(^UPRN("LPI",uprn,key)) d
  ..S ^UPRN("LPI",uprn,key)=nrec
  .k dpadd
@@ -618,12 +619,11 @@ IMPBLP ;
  .s insdate=$p(rec,del,16)
  .s update=$p(rec,del,18)
  .s parent=$p(rec,del,8)
- .s coord1=$p(rec,del,9)_","_$P(rec,del,10)
+ .s coord1=$p(rec,del,9)_","_$P(rec,del,10)_","_$p(rec,del,11)_","_$p(rec,del,12)_","_$p(rec,del,13)
  .s local=$p(rec,del,14)
  .s adpost=$p(rec,del,20)
  .S newrec=$tr(adpost_"~"_post_"~"_status_"~"_bpstat_"~"_insdate_"~"_update_"~"_coord1_"~"_local,"""")
- .I newrec'=$G(^UPRN("U",uprn)) d
- ..S ^UPRN("U",uprn)=$tr(adpost_"~"_post_"~"_status_"~"_bpstat_"~"_insdate_"~"_update_"~"_coord1_"~"_local,"""")
+ .S ^UPRN("U",uprn)=$tr(adpost_"~"_post_"~"_status_"~"_bpstat_"~"_insdate_"~"_update_"~"_coord1_"~"_local,"""")
  .i parent'="" d
  ..i '$D(^UPRN("UPC",parent,uprn)) d
  ...S ^UPRN("UPC",parent,uprn)=""

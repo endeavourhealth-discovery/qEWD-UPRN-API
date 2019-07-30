@@ -184,6 +184,13 @@ MATCHONE(adrec,qpost,orgpost)    ;matches one address
  D match(adflat,adbuild,adbno,adepth,adstreet,adeploc,adloc,adpost,adf2,adb2)
  i $D(^TUPRN($J,"MATCHED")) d  q 
  .d matched
+ .quit
+ 
+ i adbuild'="",adflat'="",adbno="",adstreet'="" d  i $D(^TUPRN($J,"MATCHED")) d matched q
+ .s adbno=adflat,adstreet=adbuild_" "_adstreet,adflat="",adbuild=""
+ .d match(adflat,adbuild,adbno,adepth,adstreet,adeploc,adloc,adpost,adf2,adb2)
+ .quit
+ 
  i adbuild'="" d
  .D match(adflat,"former "_adbuild,adbno,adepth,adstreet,adeploc,adloc,adpost,adf2,adb2)
  i $D(^TUPRN($J,"MATCHED")) d  q 
@@ -1243,7 +1250,7 @@ match7(tpost,tstreet,tbno,tbuild,tflat)          ;
  s post=""
  for  s post=$O(^UPRN("X3",tstreet,tbno,post)) q:post=""  d  q:$d(^TUPRN($J,"MATCHED"))
  .q:post=tpost
- .s $p(matchrec,",",1)=$$nearpost(post,adpost,try)
+ .s near=$$nearpost(post,adpost,try)
  .q:near=""
  .s $p(matchrec,",",1)=near
  .i $P(matchrec,",",1)=""!($p(matchrec,",",1)="Pp") q

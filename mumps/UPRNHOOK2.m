@@ -11,6 +11,12 @@ SETUP	;
 	S ^%W(17.6001,100,0)="GET"
 	S ^%W(17.6001,100,1)="api/getinfo"
 	S ^%W(17.6001,100,2)="GETMUPRN^UPRNHOOK2"
+
+	S ^%W(17.6001,"B","GET","api/getuprn","GETMUPRNI^UPRNHOOK2",101)=""
+	S ^%W(17.6001,101,"AUTH")=1
+	S ^%W(17.6001,101,0)="GET"
+	S ^%W(17.6001,101,1)="api/getuprn"
+	S ^%W(17.6001,101,2)="GETMUPRNI^UPRNHOOK2"
 	quit
 	
 	; M Web server hook
@@ -33,6 +39,16 @@ GETMUPRN(result,arguments)
 	set result("mime")="application/json, text/plain, */*"
 	S ^TMP($J,1)=^temp($J,1)
 	set result=$na(^TMP($j))
+	quit
+	
+GETMUPRNI(result,arguments)
+	K ^TMP($J)
+	
+	set uprn=$get(arguments("uprn"))
+	do GETUPRNI^UPRNMGR(uprn)
+	set result("mime")="application/json, text/plain, */*"
+	S ^TMP($J,1)=^temp($J,1)
+	set result=$na(^TMP($j))	
 	quit
 	
 	; qEWD Web server hook	

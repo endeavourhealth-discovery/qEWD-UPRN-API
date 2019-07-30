@@ -258,6 +258,17 @@ approx(test,tomatch)         ;goes for a very approximatr match
  ..s matched=1
  q matched
  
+matchbld(build,tbuild)       ;
+ n test,var,var1,suffix
+ d drop(.build,.tbuild)
+ i build=tbuild q 1
+ i $l(build)<$l(tbuild) d
+ .s var="build",var1="tbuild"
+ e  d
+ .s var="tbuild",var1="build"
+ i $D(^UPRNS("DROPSUFFIX",$e(@var1,$l(@var)+2,$l(@var1)))) q 1
+ q 0
+ 
 equiv(test,tomatch,min,force)          ;Swaps drops and levenshtein
  i $D(^UPRNW("SFIX",tomatch,test)) q 1
  N otest,otomatch
@@ -381,6 +392,7 @@ SETSWAPS ;
  K ^UPRNS("CORRECT")
  K ^UPRNS("DROP")
  K ^UPRNS("SWAP")
+ S ^UPRNS("DROPSUFFIX","building")=""
  K ^UPRNS("FLOOR")
  S ^UPRNS("FLOOR","basement","a")=""
  S ^UPRNS("FLOOR","ground floor","a")=""
