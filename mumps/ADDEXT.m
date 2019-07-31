@@ -20,6 +20,8 @@ GO(file)
  .set postcode=$p(z,",",8)
  .set adrec=add1_","_add2_","_add3_","_add4_","_county_","_postcode
  .;set adrec=add1_","_add2_","_add3_","_add4_","_county_","_orgpost
+ .set adrec=$tr(adrec,$c(13),"")
+ .set orgpost=$tr(orgpost,$c(13),"")
  .d GETUPRN^UPRNMGR(adrec,"",orgpost)
  .;
  .;U 0 W !,orgpost,!,adrec,!,^temp($j,1),! r *y
