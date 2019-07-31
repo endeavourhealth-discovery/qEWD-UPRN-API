@@ -1,9 +1,26 @@
 CURL ; ; 7/24/19 8:43am
  ; key-cloak user validation
+ 
+CHECKROLES(b,role)
+ new ok,i
+ set ok=0
+ for i=1:1:$order(b("realm_access","roles",""),-1) if $get(b("realm_access","roles",i))=role set ok=1 quit
+ quit ok
+	
 VALTOKEN(token) 
- new cmd,json,b
+ new cmd,json,b,x,ok,role,endpoint
  
  set ^TOKEN=token
+ 
+ ; does the token contain the correct role?
+ set role=$get(^ICONFIG("ROLE"))
+ if role="" quit 0
+ set x=$piece(token,".",2)
+ set json=$$DECODE^BASE64(x)
+ kill b,err
+ d DECODE^VPRJSON($name(json),$name(b),$name(err))
+ set ok=$$CHECKROLES(.b,role)
+ if 'ok quit 0
  
  set endpoint=$get(^ICONFIG("USERINFO-ENDPOINT"))
  if endpoint="" quit 0
@@ -16,6 +33,7 @@ VALTOKEN(token)
  zsystem cmd
  
  set json=$$TEMP("/tmp/a"_$job_".txt")
+ kill b,err
  d DECODE^VPRJSON($name(json),$name(b),$name(err))
  
  if '$data(b("sub")) quit 0
