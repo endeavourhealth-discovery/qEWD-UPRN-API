@@ -1861,7 +1861,7 @@ fnsplit(tbno,bno,tflat,flat) ;Number includes flat
  i bno'="",tbno'="",flat=tbno,(tbno*1)=bno q 1 ;
  i flat?1l,$e(tbno,$l(tbno))=flat,bno=(tbno*1) q 1
  q 0
-match11(tpost,tstreet,tbno,tbuild,tflat,lastchan) 
+match11(tpost,tstreet,tbno,tbuild,tflat,lastchance) 
  ;Cycles through all uprns looking for fuzzy streets,odd buildings
  n matched,front,back,flatlist,xstreet,xbuild,lenstreet
  s matched=0
