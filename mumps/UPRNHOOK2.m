@@ -17,6 +17,39 @@ SETUP	;
 	S ^%W(17.6001,101,0)="GET"
 	S ^%W(17.6001,101,1)="api/getuprn"
 	S ^%W(17.6001,101,2)="GETMUPRNI^UPRNHOOK2"
+	
+	S ^%W(17.6001,"B","GET","api/getstatus","GETMSTATUS^UPRNHOOK2",103)=""
+	S ^%W(17.6001,103,"AUTH")=1
+	S ^%W(17.6001,103,0)="GET"
+	S ^%W(17.6001,103,1)="api/getstatus"
+	S ^%W(17.6001,103,2)="GETMSTATUS^UPRNHOOK2"
+
+	S ^%W(17.6001,"B","GET","api/load","GETLOAD^UPRNHOOK2",999)=""
+	S ^%W(17.6001,999,"AUTH")=1
+	S ^%W(17.6001,999,0)="GET"
+	S ^%W(17.6001,999,1)="api/load"
+	S ^%W(17.6001,999,2)="GETLOAD^UPRNHOOK2"
+	quit
+
+GETLOAD(result,arguments)
+	N ok
+	K ^TMP($J)
+	set dir=$Get(arguments("d"))
+	S ^F=dir
+	if dir="" S HTTPERR=500 D SETERROR^VPRJRUT("500","undefined") quit
+	do LOAD^UPRNMGR(dir)
+	set result("mime")="application/json, text/plain, */*"
+	S ^TMP($J,1)=^temp($j,1)
+	set result=$na(^TMP($j))
+	quit
+	
+GETMSTATUS(result,arguments)
+	N ok
+	K ^TMP($J)
+	set ok=$$STATUS^UPRNMGR()
+	set result("mime")="application/json, text/plain, */*"
+	S ^TMP($J,1)=^temp($J,1)
+	set result=$na(^TMP($j))
 	quit
 	
 	; M Web server hook
