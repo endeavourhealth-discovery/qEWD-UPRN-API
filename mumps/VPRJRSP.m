@@ -1,4 +1,4 @@
-VPRJRSP ;SLC/KCM -- Handle HTTP Response;2018-08-17  9:24 AM ; 7/24/19 8:17am
+VPRJRSP ;SLC/KCM -- Handle HTTP Response;2018-08-17  9:24 AM ; 8/7/19 11:09am
  ;;1.0;JSON DATA STORE;;Sep 01, 2012
  ;
  ; -- prepare and send RESPONSE
@@ -173,6 +173,8 @@ SENDATA ; write out the data as an HTTP response
  I 'SIZE D FLUSH Q  ; flush buffer and quit if empty
  ;
  N I,J
+ ;
+ ;
  I RSPTYPE=1 D            ; write out local variable
  . I $D(HTTPRSP)#2 D W(HTTPRSP)
  . I $D(HTTPRSP)>1 S I=0 F  S I=$O(HTTPRSP(I)) Q:'I  D W(HTTPRSP(I))
@@ -182,16 +184,16 @@ SENDATA ; write out the data as an HTTP response
  . I $D(@HTTPRSP)>1 D
  . . N ORIG,OL S ORIG=HTTPRSP,OL=$QL(HTTPRSP) ; Orig, Orig Length
  . . ; ZSHOW "*":^KBANTEMP
- . . ; F  S HTTPRSP=$Q(@HTTPRSP) Q:(($G(HTTPRSP)="")!($NA(@HTTPRSP,OL)'=$NA(@ORIG,OL)))  D W(@HTTPRSP)
+ . . F  S HTTPRSP=$Q(@HTTPRSP) Q:(($G(HTTPRSP)="")!($NA(@HTTPRSP,OL)'=$NA(@ORIG,OL)))  D W(@HTTPRSP)
  . . ; Vertical rewrite & fixes for GT.M 6.3
- . . N HTTPEXIT S HTTPEXIT=0
- . . F  D  Q:HTTPEXIT
- . . . S HTTPRSP=$Q(@HTTPRSP)
- . . . D:$G(HTTPRSP)'="" W(@HTTPRSP)
- . . . I $G(HTTPRSP)="" S HTTPEXIT=1
- . . . E  I $G(@HTTPRSP),$G(@ORIG),$NA(@HTTPRSP,OL)'=$NA(@ORIG,OL) S HTTPEXIT=1
+ . . ;N HTTPEXIT S HTTPEXIT=0
+ . . ;F  D  Q:HTTPEXIT
+ . . ;. S HTTPRSP=$Q(@HTTPRSP)
+ . . ;. D:$G(HTTPRSP)'="" W(@HTTPRSP)
+ . . ;. I $G(HTTPRSP)="" S HTTPEXIT=1
+ . . ;. E  I $G(@HTTPRSP),$G(@ORIG),$NA(@HTTPRSP,OL)'=$NA(@ORIG,OL) S HTTPEXIT=1
  . . ; End ~ vertical rewrite
- . . S HTTPRSP=ORIG
+ . . ;S HTTPRSP=ORIG
  I RSPTYPE=3 D            ; write out pageable records
  . W PREAMBLE
  . F I=START:1:(START+LIMIT-1) Q:'$D(@HTTPRSP@($J,I))  D
