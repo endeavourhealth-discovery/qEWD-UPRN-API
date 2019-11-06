@@ -23,6 +23,8 @@ VALTOKEN(token)
  if 'ok quit 0
  
  set endpoint=$get(^ICONFIG("USERINFO-ENDPOINT"))
+ if $g(b("iss"))["machine" set endpoint=$get(^ICONFIG("USERINFO-ENDPOINT-MACHINE"))
+ 
  if endpoint="" quit 0
  
  if $piece(token," ")'="Bearer" set token="Bearer "_token
