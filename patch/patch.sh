@@ -35,6 +35,17 @@ wget https://raw.githubusercontent.com/endeavourhealth-discovery/qEWD-UPRN-API/m
 wget https://raw.githubusercontent.com/endeavourhealth-discovery/qEWD-UPRN-API/master/mumps/ADDEXT.m
 wget https://raw.githubusercontent.com/endeavourhealth-discovery/qEWD-UPRN-API/master/mumps/CURL.m
 wget https://raw.githubusercontent.com/endeavourhealth-discovery/qEWD-UPRN-API/master/mumps/PS.m
+
+# Indexing
+wget https://raw.githubusercontent.com/endeavourhealth-discovery/qEWD-UPRN-API/master/mumps/UPRNIND.m
+
+# Bench testing
+wget https://raw.githubusercontent.com/endeavourhealth-discovery/qEWD-UPRN-API/master/mumps/BENCH.m
+wget https://raw.githubusercontent.com/endeavourhealth-discovery/qEWD-UPRN-API/master/mumps/LIBDAT.m
+wget https://raw.githubusercontent.com/endeavourhealth-discovery/qEWD-UPRN-API/master/mumps/STDDATE.m
+wget https://raw.githubusercontent.com/endeavourhealth-discovery/qEWD-UPRN-API/master/mumps/LIB.m
+wget https://raw.githubusercontent.com/endeavourhealth-discovery/qEWD-UPRN-API/master/mumps/DAT.m
+	
 # M web-server routines
 wget https://raw.githubusercontent.com/endeavourhealth-discovery/qEWD-UPRN-API/master/mumps/VPRJREQ.m
 wget https://raw.githubusercontent.com/endeavourhealth-discovery/qEWD-UPRN-API/master/mumps/VPRJRSP.m
