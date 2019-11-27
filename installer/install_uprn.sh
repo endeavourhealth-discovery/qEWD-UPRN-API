@@ -31,7 +31,9 @@ mkdir /tmp/tmp ; wget -P /tmp/tmp https://gitlab.com/YottaDB/DB/YDB/raw/master/s
 cd /tmp/tmp
 chmod +x ydbinstall.sh
 #sudo ./ydbinstall.sh --utf8 default --verbose
-sudo ./ydbinstall.sh
+#sudo ./ydbinstall.sh
+#install yotta 1.26
+sudo ./ydbinstall.sh --installdir /usr/local/lib/yottadb/r126 r1.26
 
 mkdir /root/.yottadb
 mkdir /root/.yottadb/r1.26_x86_64
@@ -85,7 +87,16 @@ if [ ! -f "$FILE" ]; then
 	wget https://raw.githubusercontent.com/endeavourhealth-discovery/qEWD-UPRN-API/master/mumps/ADDEXT.m
 	wget https://raw.githubusercontent.com/endeavourhealth-discovery/qEWD-UPRN-API/master/mumps/CURL.m
 	wget https://raw.githubusercontent.com/endeavourhealth-discovery/qEWD-UPRN-API/master/mumps/PS.m
+	# Indexing
+	wget https://raw.githubusercontent.com/endeavourhealth-discovery/qEWD-UPRN-API/master/mumps/UPRNIND.m
 
+	# Bench testing
+	wget https://raw.githubusercontent.com/endeavourhealth-discovery/qEWD-UPRN-API/master/mumps/BENCH.m
+	wget https://raw.githubusercontent.com/endeavourhealth-discovery/qEWD-UPRN-API/master/mumps/LIBDAT.m
+	wget https://raw.githubusercontent.com/endeavourhealth-discovery/qEWD-UPRN-API/master/mumps/STDDATE.m
+	wget https://raw.githubusercontent.com/endeavourhealth-discovery/qEWD-UPRN-API/master/mumps/LIB.m
+	wget https://raw.githubusercontent.com/endeavourhealth-discovery/qEWD-UPRN-API/master/mumps/DAT.m
+	
 	# M web-server routines
 	wget https://raw.githubusercontent.com/endeavourhealth-discovery/qEWD-UPRN-API/master/mumps/VPRJREQ.m
 	wget https://raw.githubusercontent.com/endeavourhealth-discovery/qEWD-UPRN-API/master/mumps/VPRJRSP.m
@@ -147,6 +158,9 @@ export ydb_rel=r1.26_x86_64
 $ydb_dist/mupip SET -NULL_SUBSCRIPTS=true -region DEFAULT
 
 $ydb_dist/mupip set - journal=off -region '*'
+
+$ydb_dist/mupip set -journal=nobefore -region DEFAULT
+$ydb_dist/mupip set -access_method=mm -region DEFAULT
 
 monkey=$(cat '/tmp/monkey3.txt')
 
