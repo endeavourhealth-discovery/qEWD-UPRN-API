@@ -159,7 +159,6 @@ $ydb_dist/mupip SET -NULL_SUBSCRIPTS=true -region DEFAULT
 
 $ydb_dist/mupip set - journal=off -region '*'
 
-$ydb_dist/mupip set -journal=nobefore -region DEFAULT
 $ydb_dist/mupip set -access_method=mm -region DEFAULT
 
 monkey=$(cat '/tmp/monkey3.txt')
