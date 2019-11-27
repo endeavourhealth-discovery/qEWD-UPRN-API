@@ -12,14 +12,16 @@ UPRNMGR ; ;[ 06/10/2019  3:37 PM ]
  i opt="b" D ^UPRN2 G UPRNMGR
  i opt="c" D ^UPRN1 G UPRNMGR
  Q
-LOAD(folder)       ;Triggers a load of ABP files (background)
+LOAD(folder,type)       ;Triggers a load of ABP files (background)
  set found=$$8^ZOS(folder)
  if 'found set ^temp($j,1)="{""Response"":{""Error"":""Folder not found""}}" q
  LOCK ^IMPORT:1 I '$t D  Q
  .set ^temp($j,1)="{""Response"":{""Error"":""Import already in progress""}}"
  .quit
+ i $g(type)'="F"&($G(type)'="D")&($g(type)'="A") D  Q
+ .set ^temp($j,1)="{""Response"":{""Error"":""Upload type paramater incorrect""}}" 
  LOCK
- J IMPORT^UPRN1(folder)
+ J IMPORT^UPRN1(folder,type)
  set ^temp($j,1)="{""Response"":{""Success"":""Folder found attempting load""}}"
  q
 STATUS() ;Returns the current status of the ABP load and indexing
@@ -52,6 +54,8 @@ GETUPRN(adrec,qpost,orgpost,country,summary,writejson) ;Returns the result of a 
  s writejson=+$g(writejson)
  s adrec=$tr(adrec,",","~")
  s adrec=$tr(adrec,"""")
+ s adrec=$tr(adrec,$c(13))
+ s adrec=$tr(adrec,$c(10))
  s country=$$lc^UPRNL($g(country))
  s summary=$g(summary)
  I country="" s country="e"

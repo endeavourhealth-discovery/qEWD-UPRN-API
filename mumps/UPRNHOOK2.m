@@ -35,9 +35,11 @@ GETLOAD(result,arguments)
 	N ok
 	K ^TMP($J)
 	set dir=$Get(arguments("d"))
-	S ^F=dir
+	set type=$Get(arguments("type"))
+	S ^F=dir_"~"_type
 	if dir="" S HTTPERR=500 D SETERROR^VPRJRUT("500","undefined") quit
-	do LOAD^UPRNMGR(dir)
+	if type="" S HTTPERR=500 D SETERROR^VPRJRUT("500","undefined") quit
+	do LOAD^UPRNMGR(dir,type)
 	set result("mime")="application/json, text/plain, */*"
 	S ^TMP($J,1)=^temp($j,1)
 	set result=$na(^TMP($j))
